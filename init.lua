@@ -229,7 +229,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -470,7 +470,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<C-S-K>', vim.lsp.buf.signature_help, 'Signature Documentation') --Rebind to avoid conflict with ^+hjkl keybinds
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -604,3 +604,35 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Global Remaps (Scott)
+-- Buffer Management
+vim.keymap.set("n", "<leader>bl", "<CMD>buffers<CR>")
+vim.keymap.set("n", "<leader>bn", "<CMD>bn<CR>")
+vim.keymap.set("n", "<leader>bp", "<CMD>bp<CR>")
+
+-- Line Join Management
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("n", "J", "mzJ`z")
+
+-- Up and down stay in screen middle
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
+
+-- Terminal Settings
+-- Quick terminal session on bottom
+vim.keymap.set("n", "<leader>tb", "<CMD>split<CR> | <C-w>j | :resize 12<CR> | <CMD>term<CR>i")
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>") -- Double escape to normal
+
+-- Lazy Leader substitutions
+vim.keymap.set("n", "<leader>w", "<C-W>")
+
+-- Edge Case Management
+vim.keymap.set("i", "<C-c>", "<Esc>")
+
+-- Plugin Mappings
+vim.keymap.set("n", "<leader>tt", "<CMD>Neotree toggle<CR>")
+
