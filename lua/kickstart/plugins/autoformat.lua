@@ -65,6 +65,11 @@ return {
               filter = function(c)
                 return c.id == client.id
               end,
+              formatting_options = {
+                --insert_spaces = true,
+                --insert_final_newline = true,
+                trimFinalNewlines = false
+              }
             }
           end,
         })
