@@ -126,12 +126,34 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
-        vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
-        vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
-        vim.keymap.set('n', '<leader>hu', require('gitsigns').undo_stage_hunk, { buffer = bufnr, desc = 'Undo stage git hunk' })
-        -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
+
+        --hunk navigation
+        vim.keymap.set('n', '<leader>]h', gs.next_hunk, { buffer = bufnr, desc = 'Next Hunk' })
+        vim.keymap.set('n', '<leader>[h', gs.prev_hunk, { buffer = bufnr, desc = 'Previous Hunk' })
+
+        --hunk interactions
+        vim.keymap.set('n', '<leader>hp', gs.preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+        vim.keymap.set('n', '<leader>hr', gs.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
+        vim.keymap.set('n', '<leader>hs', gs.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
+        vim.keymap.set('n', '<leader>hu', gs.undo_stage_hunk, { buffer = bufnr, desc = 'Undo stage git hunk' })
+        --buffer interactions
+        vim.keymap.set('n', '<leader>hR', gs.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
+        vim.keymap.set('n', '<leader>hS', gs.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
+
+        --blame
+        vim.keymap.set('n', '<leader>hb', function ()
+          gs.blame_line({ full = true })
+        end, { desc="Blame line" })
+        vim.keymap.set('n', '<leader>hB', gs.toggle_current_line_blame, { desc = 'Toggle line blame' })
+
+        --diffs!
+        vim.keymap.set('n', '<leader>hd', gs.diffthis, { desc = 'Diff this' })
+        vim.keymap.set('n', '<leader>hD', function ()
+          gs.diffthis('~')
+        end, { desc = 'Diff this ~' })
+
+        -- don't override the built-in and fugitive keymaps
         vim.keymap.set({ 'n', 'v' }, ']c', function()
           if vim.wo.diff then
             return ']c'
