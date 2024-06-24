@@ -112,7 +112,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -138,18 +138,18 @@ require('lazy').setup({
         vim.keymap.set('n', '<leader>hs', gs.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
         vim.keymap.set('n', '<leader>hu', gs.undo_stage_hunk, { buffer = bufnr, desc = 'Undo stage git hunk' })
         --buffer interactions
-        vim.keymap.set('n', '<leader>hR', gs.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
-        vim.keymap.set('n', '<leader>hS', gs.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
+        vim.keymap.set('n', '<leader>hR', gs.reset_buffer, { buffer = bufnr, desc = 'Reset buffer' })
+        vim.keymap.set('n', '<leader>hS', gs.stage_buffer, { buffer = bufnr, desc = 'Stage buffer' })
 
         --blame
-        vim.keymap.set('n', '<leader>hb', function ()
+        vim.keymap.set('n', '<leader>hb', function()
           gs.blame_line({ full = true })
-        end, { desc="Blame line" })
+        end, { desc = "Blame line" })
         vim.keymap.set('n', '<leader>hB', gs.toggle_current_line_blame, { desc = 'Toggle line blame' })
 
         --diffs!
         vim.keymap.set('n', '<leader>hd', gs.diffthis, { desc = 'Diff this' })
-        vim.keymap.set('n', '<leader>hD', function ()
+        vim.keymap.set('n', '<leader>hD', function()
           gs.diffthis('~')
         end, { desc = 'Diff this ~' })
 
@@ -191,7 +191,7 @@ require('lazy').setup({
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
     'folke/tokyonight.nvim',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    lazy = false,   -- make sure we load this during startup if it is your main colorscheme
     priority = 900, -- make sure to load this before all the other start plugins
     config = function()
       -- Load the colorscheme here.
@@ -388,7 +388,7 @@ local function live_grep_git_root()
   local git_root = find_git_root()
   if git_root then
     require('telescope.builtin').live_grep({
-      search_dirs = {git_root},
+      search_dirs = { git_root },
     })
   end
 end
@@ -421,7 +421,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'java', 'scala'},
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'java', 'scala' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -559,7 +559,7 @@ local servers = {
   pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
-  html = { filetypes = { 'html', 'twig', 'hbs'} },
+  html = { filetypes = { 'html', 'twig', 'hbs' } },
 
   lua_ls = {
     Lua = {
@@ -685,14 +685,14 @@ vim.keymap.set("x", "<leader>re", ":Refactor extract ")
 vim.keymap.set("x", "<leader>rf", ":Refactor extract_to_file ")
 vim.keymap.set("x", "<leader>rv", ":Refactor extract_var ")
 vim.keymap.set({ "n", "x" }, "<leader>ri", ":Refactor inline_var")
-vim.keymap.set( "n", "<leader>rI", ":Refactor inline_func")
+vim.keymap.set("n", "<leader>rI", ":Refactor inline_func")
 vim.keymap.set("n", "<leader>rb", ":Refactor extract_block")
 vim.keymap.set("n", "<leader>rbf", ":Refactor extract_block_to_file")
 
 --swenv python environment selection
-vim.keymap.set("n", "<leader>pv", function ()
+vim.keymap.set("n", "<leader>pv", function()
   require("swenv.api").set_venv(".venv")
-  end, { desc = "Python Virtual Environment .venv Select" })
+end, { desc = "Python Virtual Environment .venv Select" })
 
 
 -- Split Configuration
@@ -705,3 +705,59 @@ vim.opt.inccommand = 'split'
 -- Show which line your cursor is on
 vim.opt.cursorline = true
 
+--autogroups for file opened
+
+local luagroup = vim.api.nvim_create_augroup("LuaBuffer", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*.lua",
+  callback = function()
+    vim.o.tabstop = 4
+    vim.o.softtabstop = 4
+    vim.o.shiftwidth = 4
+    vim.o.textwidth = 79
+    vim.o.expandtab = true
+    vim.o.autoindent = true
+  end,
+  group = luagroup
+})
+local pythongroup = vim.api.nvim_create_augroup("PythonBuffer", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*.py",
+  callback = function()
+    vim.o.tabstop = 4
+    vim.o.softtabstop = 4
+    vim.o.shiftwidth = 4
+    vim.o.textwidth = 79
+    vim.o.expandtab = true
+    vim.o.autoindent = true
+  end,
+  group = pythongroup
+})
+
+local goGroup = vim.api.nvim_create_augroup("GoBuffer", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*.go",
+  callback = function()
+    vim.o.tabstop = 4
+    vim.o.softtabstop = 4
+    vim.o.shiftwidth = 4
+    vim.o.textwidth = 79
+    vim.o.expandtab = true
+    vim.o.autoindent = true
+  end,
+  group = goGroup
+})
+
+local webGroup = vim.api.nvim_create_augroup("WebBuffer", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = { "*.js", "*.html", "*.css" },
+  callback = function()
+    vim.o.tabstop = 4
+    vim.o.softtabstop = 4
+    vim.o.shiftwidth = 4
+    vim.o.textwidth = 79
+    vim.o.expandtab = true
+    vim.o.autoindent = true
+  end,
+  group = webGroup
+})
