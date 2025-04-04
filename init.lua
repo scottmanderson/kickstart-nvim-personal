@@ -775,7 +775,11 @@ vim.keymap.set("i", "<C-c>", "<Esc>")
 
 -- Plugin Mappings
 --Neotree
-vim.keymap.set("n", "<leader>tt", "<CMD>Neotree toggle<CR>")
+vim.keymap.set("n", "<leader>tf", "<CMD>Neotree toggle<CR>")
+
+--ToggleTerm
+vim.keymap.set("n", "<leader>tt", "<CMD>ToggleTerm<CR>")
+vim.keymap.set({ "v" }, "<leader>tsv", "<CMD>ToggleTermSendVisualSelection<CR>")
 
 --Refactoring
 vim.keymap.set("x", "<leader>re", ":Refactor extract ")
