@@ -786,11 +786,6 @@ vim.keymap.set("n", "<leader>rI", ":Refactor inline_func")
 vim.keymap.set("n", "<leader>rb", ":Refactor extract_block")
 vim.keymap.set("n", "<leader>rbf", ":Refactor extract_block_to_file")
 
---swenv python environment selection
-vim.keymap.set("n", "<leader>pv", function()
-    require("swenv.api").set_venv(".venv")
-end, { desc = "Python Virtual Environment .venv Select" })
-
 
 -- Split Configuration
 vim.o.splitright = true
